@@ -25,3 +25,35 @@ x.setdefault("B", 0)
 x["B"] = 6
 
 print(max(x, key=lambda k: x[k]))
+
+
+a = np.arange(12).reshape(3, 4)
+print(a.shape)
+print(a)
+print(np.mean(a, axis=0))
+print(np.mean(a, axis=1))
+print("-------------")
+range = [1, 5, 5, 8]
+x = np.arange(range[0], range[1], 1)
+y = np.arange(range[2], range[3], 1)
+print(x, y)
+xx, yy = np.meshgrid(x, y)
+print(xx)
+print(yy)
+
+xxx = xx.ravel()
+xxx2 = xx.flatten()
+xx[0][0] = 100
+print(xxx)
+
+yyy2 = yy.flatten()
+print(xxx2)
+print(yyy2)
+zzz = xxx2 + yyy2
+print(zzz)
+zz = zzz.reshape(xx.shape)
+print(zz)
+
+p = np.vstack((xxx2, yyy2))
+print(p)
+

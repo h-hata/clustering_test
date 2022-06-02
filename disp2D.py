@@ -1,5 +1,16 @@
 import matplotlib.pyplot as plt
 import dataload
+import numpy as np
+
+
+def boundary(range, classifier, labels, values=[0]):
+    x = np.arange(range[0], range[1], 0.1)
+    y = np.arange(range[2], range[3], 0.1)
+    xx, yy = np.meshgrid(x, y)
+    xxx = xx.ravel()
+    yyy = yy.ravel()
+    zz = np.array(classifier(xx, yy))
+    zz.reshape(x.shape)
 
 
 def disp2D1(data, labels):
