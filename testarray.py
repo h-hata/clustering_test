@@ -17,3 +17,11 @@ y = []
 for i in range(3):
     y.append(i * i)
 print(y)
+
+x = {}
+x.setdefault("A", 0)
+x["A"] = 7
+x.setdefault("B", 0)
+x["B"] = 6
+
+print(max(x, key=lambda k: x[k]))

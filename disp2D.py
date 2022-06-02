@@ -2,7 +2,16 @@ import matplotlib.pyplot as plt
 import dataload
 
 
-def disp2D(data1, data2, labels):
+def disp2D1(data, labels):
+    for i in range(len(data)):
+        if labels[i] == 1:
+            plt.plot(data[i][0], data[i][1], "g+")
+        else:
+            plt.plot(data[i][0], data[i][1], "r*")
+    plt.show()
+
+
+def disp2D2(data1, data2, labels):
     # print(data1)
     # print(data2)
     # print(labels)
@@ -15,5 +24,5 @@ def disp2D(data1, data2, labels):
 
 if __name__ == "__main__":
     c1, c2, l = dataload.load2D("points_ring.pkl")
-    disp2D(c1, c2, l)
+    disp2D2(c1, c2, l)
 
