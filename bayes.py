@@ -24,7 +24,7 @@ class BaysClassifier(object):
         est_p = np.array(arr)
         ndx = est_p.argmax(axis=0)
         est_l = np.array([self.labels[n] for n in ndx])
-        return est_p, est_l
+        return est_l, est_p
 
 
 def gauss(m, v, x):
@@ -41,19 +41,11 @@ def gauss(m, v, x):
 if __name__ == "__main__":
     # 教師学習データを読み込む
     c1, c2, labels = dataload.load2D("points_normal.pkl")
-    model = BaysClassifier(labels, np.vstack((c1, c2)))
+    bc = BaysClassifier()
+    bc.train([c1, c2], [1, -1])
+
     # テストデータを読み込む
     c1, c2, labels = dataload.load2D("points_normal_test.pkl")
     data = np.vstack((c1, c2))
-    # 一点づつ分類する
-    judge = []
-    for p in data:
-        judge.append(model.classify(p))
-    # 検証
-    v = []
-    for i in range(len(data)):
-        if labels[i] != judge[i]:
-            v.append(-1)
-        else:
-            v.append(1)
-    disp2D.disp2D1(data, v)
+    v = bc.classify(data)
+    disp2D.disp2D1(data, v[0])

@@ -15,47 +15,56 @@ s: covariance marix ( list of 2x2 dimension)
 """
 
 
-def gauss2D(x, y, m, v):
-    p = np.c_[x, y]
+def disp3D(xx, yy, zz):
+    fig = plt.figure(figsize=(15, 5))  # unit inch
+
+    # contour
+    ax1 = fig.add_subplot(131, facecolor="w")
+    ax1.set_aspect("equal")
+    ax1.set_title("contour")
+    ax1.contour(xx, yy, zz, np.arange(0.01, 0.14, 0.01))
+
+    # surface
+    ax2 = fig.add_subplot(132, projection="3d", facecolor="w")
+    ax2.set_title("surface")
+    # ax2.plot_surface(xx, yy, zz, rstride=1, cstride=1, cmap=cm.coolwarm)
+    ax2.plot_surface(xx, yy, zz, rstride=1, cstride=1, cmap="plasma")
+    # ax2.plot_surface(xx, yy, zz, rstride=1, cstride=1, color="green")
+
+    # fireframe
+    ax3 = fig.add_subplot(133, projection="3d", facecolor="w")
+    ax3.set_title("wireframe")
+    ax3.plot_wireframe(
+        xx, yy, zz, linewidth=0.5, color="green",
+    )
+
+    plt.show()
+
+
+def gauss2D(p, m, v):
     det = np.linalg.det(v)
-    inv = np.linalg.inv(v)
+    try:
+        inv = np.linalg.inv(v)
+    except np.linalg.LinAlgError:
+        print("LinAlgError")
+        return np.zeros(0)
     return np.exp(-np.diag((p - m) @ inv @ (p - m).T) / 2.0) / (
-        np.sqrt((2 * np.pi) ** 2 * det)
+        np.sqrt((2 * np.pi) ** 2 * det + 1e-6)  # add small to denom. for safe
     )
 
 
 # range of calclation
-x = y = np.arange(-4, 4, 0.2)
+x = y = np.arange(-4, 4, 0.2)  # 40x40 points mesh
 xx, yy = np.meshgrid(x, y)
 xxx = xx.flatten()
 yyy = yy.flatten()
-
+p = np.c_[xxx, yyy]
 m = np.array([0, 0])  # mean
-v = np.array([[1, 0.3], [0.3, 2]])  # covariance matrix
-zzz = gauss2D(xxx, yyy, m, v)
+v = np.array([[1, 1], [1, 1]])  # covariance matrix
+zzz = gauss2D(p, m, v)
+if zzz.shape[0] != p.shape[0]:
+    print("Error")
+    exit(0)
 zz = zzz.reshape(xx.shape)
+disp3D(xx, yy, zz)
 
-
-fig = plt.figure(figsize=(15, 5))  # unit inch
-
-# contour
-ax1 = fig.add_subplot(131, facecolor="w")
-ax1.set_aspect("equal")
-ax1.set_title("contour")
-ax1.contour(xx, yy, zz, np.arange(0.01, 0.14, 0.01))
-
-# surface
-ax2 = fig.add_subplot(132, projection="3d", facecolor="w")
-ax2.set_title("surface")
-# ax2.plot_surface(xx, yy, zz, rstride=1, cstride=1, cmap=cm.coolwarm)
-ax2.plot_surface(xx, yy, zz, rstride=1, cstride=1, cmap="plasma")
-# ax2.plot_surface(xx, yy, zz, rstride=1, cstride=1, color="green")
-
-# fireframe
-ax3 = fig.add_subplot(133, projection="3d", facecolor="w")
-ax3.set_title("wireframe")
-ax3.plot_wireframe(
-    xx, yy, zz, linewidth=0.5, color="green",
-)
-
-plt.show()
