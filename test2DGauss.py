@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import cm
+
+# from matplotlib import cm
 
 
 # 2D Gauss Distribution Function
@@ -46,11 +47,13 @@ def gauss2D(p, m, v):
     try:
         inv = np.linalg.inv(v)
     except np.linalg.LinAlgError:
-        print("LinAlgError")
         return np.zeros(0)
-    return np.exp(-np.diag((p - m) @ inv @ (p - m).T) / 2.0) / (
-        np.sqrt((2 * np.pi) ** 2 * det + 1e-6)  # add small to denom. for safe
-    )
+    X = (p - m) @ inv @ (p - m).T
+    XX = -np.diag(X)
+    XXX = np.exp(XX / 2.0)
+    denom = np.sqrt((2 * np.pi) ** 2 * det + 1e-9)  # add small to denom. for safe
+    y = XXX / denom
+    return y
 
 
 # range of calclation
@@ -60,7 +63,7 @@ xxx = xx.flatten()
 yyy = yy.flatten()
 p = np.c_[xxx, yyy]
 m = np.array([0, 0])  # mean
-v = np.array([[1, 1], [1, 1]])  # covariance matrix
+v = np.array([[1, 0.3], [0.3, 2]])  # covariance matrix
 zzz = gauss2D(p, m, v)
 if zzz.shape[0] != p.shape[0]:
     print("Error")
