@@ -45,5 +45,18 @@ if __name__ == "__main__":
             v.append(-1)
         else:
             v.append(1)
-    disp2D.disp2D1(data, v)
 
+    # XY全体で分類を行う
+
+    x = np.arange(-2, 9, 0.2)
+    y = np.arange(-3, 4, 0.2)
+    xx, yy = np.meshgrid(x, y)
+    xxx = xx.ravel()
+    yyy = yy.ravel()
+    pp = np.c_[xxx, yyy]
+    z = np.empty(0)
+    for p in pp:
+        j = model.classify(p)
+        z = np.append(z, j)
+    zz = z.reshape(xx.shape)
+    disp2D.disp2D1WithContour(data, labels, xx, yy, zz, 0)

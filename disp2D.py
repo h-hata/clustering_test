@@ -48,6 +48,16 @@ def disp2D1(data, labels):
     plt.show()
 
 
+def disp2D1WithContour(data, labels, xx, yy, zz, level):
+    for i in range(len(data)):
+        if labels[i] == 1:
+            plt.plot(data[i][0], data[i][1], "g+")
+        else:
+            plt.plot(data[i][0], data[i][1], "r*")
+    plt.contour(xx, yy, zz, 0)
+    plt.show()
+
+
 def plot2D(x, y):
     plt.plot(x, y)
     plt.show()
